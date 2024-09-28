@@ -1,7 +1,8 @@
 name: assemble
-description: A sample command-line application.
+description: Assemble is a command-line tool designed for Flutter developers to analyze and manage project dependencies efficiently.
 version: 1.0.0
-# repository: https://github.com/my_org/my_repo
+homepage: https://github.com/Nolle10/assemble
+repository: https://github.com/Nolle10/assemble
 
 environment:
   sdk: ^3.5.3
@@ -12,7 +13,8 @@ dependencies:
   args: ^2.3.0
   http: ^1.2.2
   graphviz2: ^1.0.0
+  html: ^0.15.4
 
 dev_dependencies:
-  lints: ^4.0.0
+  lints: ^5.0.0
   test: ^1.24.0

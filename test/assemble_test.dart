@@ -1,4 +1,4 @@
-import 'package:assemble/assemble.dart';
+import 'package:assemble/src/commands/assemble.dart';
 import 'package:test/test.dart';
 
 void main() {

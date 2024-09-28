@@ -12,9 +12,7 @@ Assemble is a command-line application for analyzing Flutter project dependencie
 - [Usage](#usage)
 - [Commands](#commands)
 - [Contribution](#contribution)
-- [Code of Conduct](#code-of-conduct)
 - [License](#license)
-- [Acknowledgments](#acknowledgments)
 
 ## Installation
 
