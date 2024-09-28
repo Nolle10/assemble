@@ -1,23 +1,59 @@
-# .github/workflows/publish.yml
 name: Publish to pub.dev
 
 on:
   push:
     tags:
-    - 'v[0-9]+.[0-9]+.[0-9]+' # tag pattern on pub.dev: 'v{{version}'
+      - 'v[0-9]+.[0-9]+.[0-9]+' # Trigger on version tags
 
-# Publish using custom workflow
 jobs:
-  publish:
-    permissions:
-      id-token: write # Required for authentication using OIDC
+  bump_and_publish:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
+      
+      # Setup Dart environment
       - uses: dart-lang/setup-dart@v1
+        with:
+          sdk: "stable"
+      
+      # Install dependencies
       - name: Install dependencies
         run: dart pub get
-      # Here you can insert custom steps you need
-      # - run: dart tool/generate-code.dart
-      - name: Publish
+      
+      # Bump the version number
+      - name: Bump version
+        id: bump_version
+        run: |
+          # Get current version from pubspec.yaml
+          current_version=$(grep '^version: ' pubspec.yaml | sed 's/version: //')
+          echo "Current version: $current_version"
+          
+          # Split version into major, minor, and patch
+          IFS='.' read -r major minor patch <<< "$current_version"
+          
+          # Increment the patch version (you can adjust this to increment minor/major if needed)
+          patch=$((patch + 1))
+          
+          # Form new version string
+          new_version="$major.$minor.$patch"
+          echo "New version: $new_version"
+          
+          # Update pubspec.yaml with the new version
+          sed -i "s/^version: .*/version: $new_version/" pubspec.yaml
+          
+          # Commit the version bump
+          git config user.name "github-actions"
+          git config user.email "github-actions@github.com"
+          git commit -am "Bump version to $new_version"
+          
+          # Tag the new version
+          git tag "v$new_version"
+      
+      # Push changes to the repository
+      - name: Push changes and tags
+        run: |
+          git push origin HEAD --tags
+          
+      # Publish the package to pub.dev
+      - name: Publish to pub.dev
         run: dart pub publish --force
